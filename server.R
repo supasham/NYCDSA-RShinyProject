@@ -111,4 +111,153 @@ shinyServer(function(input, output){
   #############################################################################
   
   
+  # Create helper functions to set options for Google charts 
+  #############################################################################
+  set_my_options = function(maxtenor){
+    list(
+      legend = "none",
+      seriesType = "bars",
+      series = "[{targetAxisIndex: 0},{targetAxisIndex: 1, type:'scatter'}]",
+      VAxes = "[{title:'delta'}, {title:'CDS level'}]",
+      hAxis.gridlines = "{color: '#333'}",
+      hAxis = paste0("{title:'tenor(yrs)', minValue:1, maxValue:",
+                     as.character(maxtenor),
+                     ",ticks: [",
+                     paste(as.character(c(1:maxtenor)), collapse=","),
+                     "]}"),
+      chartArea = "{height: 'automatic'}",
+      explorer = "{actions:['dragToZoom','rightClickToReset']}"
+      )
+  }
+  
+  # First 4 Infoboxes 
+  #############################################################################
+  output$scat11 <- renderGvis({
+    cht11 <- avgdata %>% 
+      filter(., (Sector == "Consumer Cycl.") & 
+               (Rating == "BB") & 
+               (Region == "North America") & 
+               (Tenor<=10)) %>%
+      transmute(., Tenor, 
+                CDS.change = round(sprdchanges,1), 
+                CDS.today = round(ParSpreadMid.t,1))
+    
+    gvisComboChart(cht11, xvar="Tenor",
+                   yvar=c("CDS.change", "CDS.today"),
+                   options=set_my_options(10))
+  })
+  
+  output$scat12 <- renderGvis({
+    cht12 <- avgdata %>% 
+      filter(., (Sector == "Consumer Non-Cycl.") & 
+               (Rating == "BB") & 
+               (Region == "North America") & 
+               (Tenor<=10)) %>% 
+      transmute(., Tenor,
+                CDS.change = round(sprdchanges,1),
+                CDS.today = round(ParSpreadMid.t,1))
+    
+    gvisComboChart(cht12, xvar="Tenor",
+                   yvar=c("CDS.change", "CDS.today"),
+                   options=set_my_options(10))
+  })
+  
+  output$scat13 <- renderGvis({
+    cht13 <- avgdata %>% 
+      filter(., (Sector == "Financials") &
+               (Rating == "AA") &
+               (Region == "North America") &
+               (Tenor<=10)) %>%
+      transmute(., Tenor,
+                CDS.change = round(sprdchanges,1),
+                CDS.today = round(ParSpreadMid.t,1))
+    
+    gvisComboChart(cht13, xvar="Tenor",
+                   yvar=c("CDS.change", "CDS.today"),
+                   options=set_my_options(10))
+  })
+  
+  output$scat14 <- renderGvis({
+    cht14 <- avgdata %>% 
+      filter(., (Sector == "Oil & Gas") & 
+               (Rating == "A") & 
+               (Region == "North America") & 
+               (Tenor<=10)) %>%
+      transmute(., Tenor,
+                CDS.change = round(sprdchanges,1),
+                CDS.today = round(ParSpreadMid.t,1))
+    
+    gvisComboChart(cht14, xvar="Tenor",
+                   yvar=c("CDS.change", "CDS.today"),
+                   options=set_my_options(10))
+  })
+  #############################################################################
+  
+  # Second 4 Infoboxes 
+  #############################################################################
+  output$scat21 <- renderGvis({
+    cht21 <- avgdata %>% 
+      filter(., (Sector == "Consumer Cycl.") &
+               (Rating == "B") &
+               (Region == "North America") &
+               (Tenor<=10)) %>% 
+      transmute(., Tenor,
+                CDS.change = round(sprdchanges,1),
+                CDS.today = round(ParSpreadMid.t,1))
+    
+    gvisComboChart(cht21, xvar="Tenor",
+                   yvar=c("CDS.change", "CDS.today"),
+                   options=set_my_options(10))
+  })
+  
+  output$scat22 <- renderGvis({
+    cht22 <- avgdata %>% 
+      filter(., (Sector == "Consumer Non-Cycl.") &
+               (Rating == "B") &
+               (Region == "North America") &
+               (Tenor<=10)) %>% 
+      transmute(., Tenor, 
+                CDS.change = round(sprdchanges,1), 
+                CDS.today = round(ParSpreadMid.t,1))
+    
+    gvisComboChart(cht22, xvar="Tenor",
+                   yvar=c("CDS.change", "CDS.today"),
+                   options=set_my_options(10))
+  })
+  
+  output$scat23 <- renderGvis({
+    cht23 <- avgdata %>% 
+      filter(., (Sector == "Financials") &
+               (Rating == "A") &
+               (Region == "North America") &
+               (Tenor<=10)) %>% 
+      transmute(., Tenor,
+                CDS.change = round(sprdchanges,1),
+                CDS.today = round(ParSpreadMid.t,1))
+    
+    gvisComboChart(cht23, xvar="Tenor",
+                   yvar=c("CDS.change", "CDS.today"),
+                   options=set_my_options(10))
+  })
+  
+  output$scat24 <- renderGvis({
+    cht24 <- avgdata %>% 
+      filter(., (Sector == "Oil & Gas") &
+               (Rating == "BBB") &
+               (Region == "North America") &
+               (Tenor<=10)) %>% 
+      transmute(., Tenor,
+                CDS.change = round(sprdchanges,1),
+                CDS.today = round(ParSpreadMid.t,1))
+    
+    gvisComboChart(cht24, xvar="Tenor",
+                   yvar=c("CDS.change", "CDS.today"),
+                   options=set_my_options(10))
+  })
+  #############################################################################
+  
+  
+  
+  
+  
 })
