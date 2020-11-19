@@ -256,7 +256,7 @@ shinyServer(function(input, output){
   })
   #############################################################################
   
-  # Server functions for First Charts item
+  # Server functions for first Charts item
   ########################################
   output$chart11 <- renderGvis({
     chtdata11 <- avgdata %>%
@@ -282,6 +282,52 @@ shinyServer(function(input, output){
     
     gvisComboChart(chtdata12, xvar = "Tenor", yvar = c("CDS.change", "CDS.today"),
                    options = set_my_options(30))
+  })
+  #############################################################################
+  
+  # Server functions for second Charts item
+  #########################################
+  
+  # Create own color palettes for heatmaps, red as negative and blue as positive
+  redpal <- c('#fff5f0','#fee0d2','#fcbba1','#fc9272','#fb6a4a','#ef3b2c','#cb181d','#a50f15','#67000d')
+  redpal <- rev(redpal)
+  bluepal <- c('#f7fbff','#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#08519c','#08306b')
+  colors <- c(redpal, bluepal)
+  
+  # Create helper function to creat ggplot heatmaps for factors
+  makefactorplots <- function(df, yvar, colorpalette) {
+    ggplot(df, aes(x = reorder(as.character(Tenor), Tenor, FUN = max),
+                   y = reorder(Category, Factor, FUN = mean))) +
+      geom_tile(aes(fill = Factor)) +
+      scale_fill_gradientn(colors = colorpalette,
+                           breaks = seq(minfactor / 100, maxfactor / 100, by = 0.01),
+                           labels = paste0(as.character(c(minfactor:maxfactor)), "%"),
+                           limits = c(minfactor / 100, maxfactor / 100)
+                           ) +
+      labs(x = "Tenor", y = yvar) +
+      theme_light() +
+      facet_grid(. ~ Class)
+  }
+  
+  # Create heatmaps for all factors
+  output$ggall <- renderPlot({
+    ggall <- makefactorplots(classdf, "All Factors", colors)
+    ggall
+  })
+
+  output$ggregion <- renderPlot({
+    ggregion <- makefactorplots(regiondf, "Region", colors)
+    ggregion
+  })
+
+  output$ggsector <- renderPlot({
+    ggsec <- makefactorplots(sectordf, "Sector", colors)
+    ggsec
+  })
+  
+  output$ggrating <- renderPlot({
+    ggrating <- makefactorplots(ratingdf, "Rating", colors)
+    ggrating
   })
   
   

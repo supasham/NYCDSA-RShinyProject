@@ -50,7 +50,6 @@ avgdata$Sector[avgdata$Sector == "Consumer Cyclical"] <- "Consumer Cycl."
 avgdata$Sector[avgdata$Sector == "Consumer Non-Cyclical"] <- "Consumer Non-Cycl."
 avgdata$Sector[avgdata$Sector == "Sovereigns/States/Agencies"] <- "SSAs"
 
-
 # Create choices for selector widgets
 sectorchoice <- unique(avgdata$Sector)
 ratingchoice <- unique(avgdata$Rating)
@@ -58,3 +57,38 @@ regionchoice <- unique(avgdata$Region)
 tenorchoice <- unique(avgdata$Tenor)
 
 
+################################################################################
+# Create factor dataframes for heatmaps
+################################################################################
+tmpdf <- avgdata %>%
+  filter(., (Region != "No Region") & (Rating != "No Rating") & (Sector != "All")) %>%
+  select(., Sector, Rating, Region, Tenor, tenorfactorchng, sectorfactorchng, ratingfactorchng, regionfactorchng)
+
+sectordf <- tmpdf %>%
+  mutate(., Class = "Sector") %>%
+  select(., Category = Sector, Class, Tenor, Factor = sectorfactorchng) %>%
+  unique(.,)
+
+ratingdf <- tmpdf %>%
+  mutate(., Class = "Rating") %>%
+  select(., Category = Rating, Class, Tenor, Factor = ratingfactorchng) %>%
+  unique(.,)
+
+regiondf <- tmpdf %>%
+  mutate(., Class = "Region") %>%
+  select(., Category = Region, Class, Tenor, Factor = regionfactorchng) %>%
+  unique(.,)
+
+tenordf <- tmpdf %>%
+  mutate(., Class = "SYSTEMIC") %>%
+  mutate(., Category = "SYSTEMIC") %>%
+  select(., Category, Class, Tenor, Factor = tenorfactorchng) %>%
+  unique(.,)
+
+classdf <- bind_rows(regiondf, sectordf, ratingdf, tenordf)
+classdf <- classdf %>%
+  filter(., Tenor <= 10) %>%
+  group_by(., Class)
+
+maxfactor = ceiling(100*max(classdf$Factor))
+minfactor = floor(100*min(classdf$Factor))

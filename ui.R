@@ -89,6 +89,14 @@ shinyUI(dashboardPage(title = "CDS Dashboard",
                                                htmlOutput("chart12"), width = 6, height = 300
                                                )
                                            )
+                                  ),
+                          tabItem(tabName = "charts2",
+                                  fluidRow(box(plotOutput("ggall")),
+                                           box(plotOutput("ggsector"))
+                                           ),
+                                  fluidRow(box(plotOutput("ggregion")),
+                                           box(plotOutput("ggrating"))
+                                           )
                                   )
                           )
                         )
