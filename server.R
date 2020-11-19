@@ -118,7 +118,7 @@ shinyServer(function(input, output){
       legend = "none",
       seriesType = "bars",
       series = "[{targetAxisIndex: 0},{targetAxisIndex: 1, type:'scatter'}]",
-      VAxes = "[{title:'delta'}, {title:'CDS level'}]",
+      vAxes = "[{title:'delta'}, {title:'CDS level'}]",
       hAxis.gridlines = "{color: '#333'}",
       hAxis = paste0("{title:'tenor(yrs)', minValue:1, maxValue:",
                      as.character(maxtenor),
@@ -256,6 +256,33 @@ shinyServer(function(input, output){
   })
   #############################################################################
   
+  # Server functions for First Charts item
+  ########################################
+  output$chart11 <- renderGvis({
+    chtdata11 <- avgdata %>%
+      filter(., (Sector == input$sectorselected1) &
+               (Rating == input$ratingselected1) &
+               (Region == input$regionselected1)) %>%
+      transmute(., Tenor,
+                CDS.change = round(sprdchanges, 1),
+                CDS.today = round(ParSpreadMid.t, 1))
+    
+    gvisComboChart(chtdata11, xvar = "Tenor", yvar = c("CDS.change", "CDS.today"),
+                   options = set_my_options(30))
+  })
+  
+  output$chart12 <- renderGvis({
+    chtdata12 <- avgdata %>%
+      filter(., (Sector == input$sectorselected2) &
+               (Rating == input$ratingselected2) &
+               (Region == input$regionselected2)) %>%
+      transmute(., Tenor,
+                CDS.change = round(sprdchanges, 1),
+                CDS.today = round(ParSpreadMid.t, 1))
+    
+    gvisComboChart(chtdata12, xvar = "Tenor", yvar = c("CDS.change", "CDS.today"),
+                   options = set_my_options(30))
+  })
   
   
   

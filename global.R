@@ -49,3 +49,12 @@ avgdata <- avgdata %>%
 avgdata$Sector[avgdata$Sector == "Consumer Cyclical"] <- "Consumer Cycl."
 avgdata$Sector[avgdata$Sector == "Consumer Non-Cyclical"] <- "Consumer Non-Cycl."
 avgdata$Sector[avgdata$Sector == "Sovereigns/States/Agencies"] <- "SSAs"
+
+
+# Create choices for selector widgets
+sectorchoice <- unique(avgdata$Sector)
+ratingchoice <- unique(avgdata$Rating)
+regionchoice <- unique(avgdata$Region)
+tenorchoice <- unique(avgdata$Tenor)
+
+

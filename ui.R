@@ -58,6 +58,37 @@ shinyUI(dashboardPage(title = "CDS Dashboard",
                                     box(title = "Oil & Gas : BBB", status = "primary",
                                         solidHeader = TRUE, htmlOutput("scat24"), width=3)
                                     )
+                                  ),
+                          tabItem(tabName = "charts1",
+                                  # Create first chart sub-item that will allow user to choose own factors to plot
+                                  fluidRow(box(title = "Term Structure 1", status = "primary", solidHeader = TRUE,
+                                               selectizeInput("regionselected1", "Select Region to Display",
+                                                              regionchoice),
+                                               selectizeInput("sectorselected1", "Select Sector to Display",
+                                                              sectorchoice),
+                                               selectizeInput("ratingselected1", "Select Rating to Display",
+                                                              ratingchoice),
+                                               width = 3
+                                               ),
+                                           box(title = "Term Structure 1", status = "primary", solidHeader = TRUE,
+                                               htmlOutput("chart11"), width = 6, height = 300
+                                               )
+                                           ),
+                                  br(),
+                                  br(),
+                                  fluidRow(box(title = "Term Structure 2", status = "info", solidHeader = TRUE,
+                                               selectizeInput("regionselected2", "Select Region to Display",
+                                                              regionchoice),
+                                               selectizeInput("sectorselected2", "Select Sector to Display",
+                                                              sectorchoice),
+                                               selectizeInput("ratingselected2","Select Rating to Display",
+                                                              ratingchoice),
+                                               width = 3
+                                               ),
+                                           box(title = "Term Structure 2", status = "info", solidHeader = TRUE,
+                                               htmlOutput("chart12"), width = 6, height = 300
+                                               )
+                                           )
                                   )
                           )
                         )
