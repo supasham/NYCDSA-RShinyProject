@@ -91,11 +91,37 @@ shinyUI(dashboardPage(title = "CDS Dashboard",
                                            )
                                   ),
                           tabItem(tabName = "charts2",
+                                  # Create second chart sub-item consisting of heatmaps of the major factors
                                   fluidRow(box(plotOutput("ggall")),
                                            box(plotOutput("ggsector"))
                                            ),
                                   fluidRow(box(plotOutput("ggregion")),
                                            box(plotOutput("ggrating"))
+                                           )
+                                  ),
+                          tabItem(tabName = "charts3",
+                                  # Create third chart sub-item consisting of distribution plots of various factors
+                                  fluidRow(box(title = "Factor", status = "primary", solidHeader = TRUE,
+                                               radioButtons("radio31", label = "Please select:",
+                                                            choices = list("Region", "Sector", "Rating"),
+                                                            selected = "Region"),
+                                               width = 2),
+                                           box(plotOutput("ggdistbox")),
+                                           box(title = "Select tenor:", status = "primary", solidHeader = TRUE,
+                                               radioButtons("radio32", label = "Please select:",inline = TRUE,
+                                                            choices = tenorchoice, selected = tenorchoice[6]),
+                                               width = 2, height = 200),
+                                           ),
+                                  fluidRow(box(title = "Factor", status = "primary", solidHeader = TRUE,
+                                               radioButtons("radio33", label = "Please select:",
+                                                            choices = list("Region", "Sector", "Rating"),
+                                                            selected = "Region"),
+                                               width = 2),
+                                           box(plotOutput("ggdistdensity")),
+                                           box(title = "Select tenor:", status = "primary", solidHeader = TRUE,
+                                               radioButtons("radio34", label = "Please select:", inline = TRUE,
+                                                            choices = tenorchoice, selected = tenorchoice[6]),
+                                               width = 2, height = 200),
                                            )
                                   )
                           )

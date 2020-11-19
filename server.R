@@ -256,6 +256,7 @@ shinyServer(function(input, output){
   })
   #############################################################################
   
+  
   # Server functions for first Charts item
   ########################################
   output$chart11 <- renderGvis({
@@ -284,6 +285,7 @@ shinyServer(function(input, output){
                    options = set_my_options(30))
   })
   #############################################################################
+  
   
   # Server functions for second Charts item
   #########################################
@@ -328,6 +330,45 @@ shinyServer(function(input, output){
   output$ggrating <- renderPlot({
     ggrating <- makefactorplots(ratingdf, "Rating", colors)
     ggrating
+  })
+  #############################################################################
+  
+  
+  # Server functions for third Charts item
+  #########################################
+  output$ggdistbox <- renderPlot({
+    bvar1 = input$radio31
+    bvar2 = input$radio32
+    
+    ggdistbox <- avgdata %>%
+      filter(., (Rating != "No Rating") & (Rating != "CCC")) %>%
+      filter(., Tenor == bvar2) %>%
+      ggplot(., aes(x = reorder(get(bvar1), ParSpreadMid.t, FUN = mean),
+                    y = ParSpreadMid.t, fill = get(bvar1))) +
+      geom_boxplot(alpha = 0.5) + 
+      coord_flip() +
+      labs(x = bvar1, y = "CDS spread") +
+      theme_light() +
+      theme(legend.position = "none")
+    
+    ggdistbox
+  })
+  
+  
+  
+  output$ggdistdensity <- renderPlot({
+    dvar1 = input$radio33
+    dvar2 = input$radio34
+    
+    ggdistdensity <- avgdata %>%
+      filter(., (Rating != "No Rating") & (Rating != "CCC")) %>%
+      filter(., Tenor == dvar2) %>%
+      ggplot(., aes(x = ParSpreadMid.t, fill = get(dvar1))) +
+      geom_density(alpha = 0.25) +
+      labs(x = "CDS Spread", y = "Frequency", fill = dvar1) +
+      theme_light()
+    
+    ggdistdensity
   })
   
   
