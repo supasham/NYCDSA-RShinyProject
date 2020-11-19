@@ -354,8 +354,6 @@ shinyServer(function(input, output){
     ggdistbox
   })
   
-  
-  
   output$ggdistdensity <- renderPlot({
     dvar1 = input$radio33
     dvar2 = input$radio34
@@ -370,8 +368,17 @@ shinyServer(function(input, output){
     
     ggdistdensity
   })
+  #############################################################################
   
   
+  # Server functions for data table item
+  #########################################
+  output$table <- DT::renderDataTable({
+    datatable(factortbl, rownames = FALSE, filter = "top") %>%
+      formatPercentage(3:13, digits = 2) %>%
+      formatStyle("5", background = "skyblue", fontWeight = 'bold')
+  })
+  #############################################################################
   
   
 })

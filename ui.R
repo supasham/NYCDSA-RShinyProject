@@ -1,5 +1,5 @@
 ################################################################################
-# Shameer SUkha  - R Shiny project
+# Shameer SUkha  - R Shiny project - NYCDSA 18 November 2020
 # ui.R
 ################################################################################
 
@@ -123,6 +123,10 @@ shinyUI(dashboardPage(title = "CDS Dashboard",
                                                             choices = tenorchoice, selected = tenorchoice[6]),
                                                width = 2, height = 200),
                                            )
+                                  ),
+                          tabItem(tabName = "data",
+                                  # Create data table of factor changes 
+                                  fluidRow(box(DT::dataTableOutput("table"), width = 12))
                                   )
                           )
                         )

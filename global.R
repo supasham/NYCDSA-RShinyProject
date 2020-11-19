@@ -9,9 +9,9 @@ library(tidyverse)
 library(googleVis)
 library(DT)
 
-# Would normally load data from .csv files in location but for project use saved workspace
+# Would normally load data from .csv files but for project 
+# use saved workspace as example
 load("my_workspace.RData")
-
 
 
 ################################################################################
@@ -29,8 +29,10 @@ avgdata <- inner_join(avgdata, avgyest,
 
 # Replace NAs with zeros for numeric columns
 avgdata <- avgdata %>%
-  replace_na(list(GlobalSpread.t = 0, SectorFactor.t = 0, RatingFactor.t = 0, RegionFactor.t = 0,
-                  GlobalSpread.y = 0, SectorFactor.y = 0, RatingFactor.y = 0, RegionFactor.y = 0))
+  replace_na(list(GlobalSpread.t = 0, SectorFactor.t = 0, 
+                  RatingFactor.t = 0, RegionFactor.t = 0,
+                  GlobalSpread.y = 0, SectorFactor.y = 0, 
+                  RatingFactor.y = 0, RegionFactor.y = 0))
 
 # Replace blanks with better label
 avgdata$Region[avgdata$Region == ""] = "No Region"
@@ -58,11 +60,14 @@ tenorchoice <- unique(avgdata$Tenor)
 
 
 ################################################################################
-# Create factor dataframes for heatmaps
+# Create factor dataframes for heatmaps and data table
 ################################################################################
 tmpdf <- avgdata %>%
-  filter(., (Region != "No Region") & (Rating != "No Rating") & (Sector != "All")) %>%
-  select(., Sector, Rating, Region, Tenor, tenorfactorchng, sectorfactorchng, ratingfactorchng, regionfactorchng)
+  filter(., (Region != "No Region") & 
+           (Rating != "No Rating") & 
+           (Sector != "All")) %>%
+  select(., Sector, Rating, Region, Tenor, 
+         tenorfactorchng, sectorfactorchng, ratingfactorchng, regionfactorchng)
 
 sectordf <- tmpdf %>%
   mutate(., Class = "Sector") %>%
@@ -92,3 +97,11 @@ classdf <- classdf %>%
 
 maxfactor = ceiling(100*max(classdf$Factor))
 minfactor = floor(100*min(classdf$Factor))
+
+factortbl <- classdf %>%
+  mutate(., Factor = round(Factor,4)) %>%
+  pivot_wider(., names_from = Tenor, values_from = Factor) %>%
+  as.data.frame(.,) %>%
+  arrange(., 5) %>%
+  group_by(., Class)
+################################################################################
