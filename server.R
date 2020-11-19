@@ -2,3 +2,8 @@
 # Shameer SUkha  - R Shiny project
 # server.R
 ################################################################################
+
+# Main function
+shinyServer(function(input, output){
+  
+})
